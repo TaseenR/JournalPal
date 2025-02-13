@@ -11,23 +11,22 @@ datasource db {
 model User {
   id        String         @id @default(uuid())
   email     String         @unique
+  createdAt DateTime       @default(now())
   clerkId   String         @unique
   updatedAt DateTime       @updatedAt
-  createdAt DateTime       @default(now())
   entries   JourneyEntry[]
 }
 
 model JourneyEntry {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  userId    String
+  content   String    @db.Text
+  user      User      @relation(fields: [userId], references: [id])
+  analysis  Analysis?
 
-  userId   String
-  user     User      @relation(fields: [userId], references: [id])
-  content  String    @db.Text
-  analysis Analysis?
-
-  @@index([userId])
+  @@unique([userId, id])
 }
 
 model Analysis {
@@ -35,11 +34,9 @@ model Analysis {
   updatedAt DateTime     @updatedAt
   createdAt DateTime     @default(now())
   mood      String
-  summary   String       @db.Text
+  summary   String
   colour    String
   negative  Boolean
-  entryId   String
+  entryId   String       @unique
   entry     JourneyEntry @relation(fields: [entryId], references: [id])
-
-  @@unique([entryId])
 }
