@@ -1,5 +1,6 @@
 import EntryCard from "@/components/EntryCard";
 import NewEntryCard from "@/components/newEntryCard";
+import { analyse } from "@/utils/ai";
 import { getUserByClerkId } from "@/utils/auth";
 import { prisma } from "@/utils/db";
 import Link from "next/link";
@@ -13,14 +14,22 @@ const getEntries = async () => {
     orderBy: {
       createdAt: "desc",
     },
+    include: {
+      analysis: true,
+    },
   });
+
+  //   console.log(
+  //     await analyse(
+  //       "Today, I bought a new keyboard. Typing feels smooth, and I'm quite satisfied with it."
+  //     )
+  //   );
 
   return entries;
 };
 
 const JournalPage = async () => {
   const entries = await getEntries();
-  console.log(entries);
 
   return (
     <div className="p-10 bg-zinc-400/10 h-full">

@@ -15,6 +15,10 @@ export const createNewEntrty = async () => {
   }
 };
 
+export const createNewAnalysis = async (id, content) => {
+  const res = await fetch(new Request(createURL(`/api/journal/${id}`)));
+};
+
 export const updateEntry = async (id, content) => {
   const res = await fetch(
     new Request(createURL(`/api/journal/${id}`), {

@@ -9,6 +9,9 @@ const getJournalEntry = async (id) => {
       userId: user.id,
       id: id,
     },
+    include: {
+      analysis: true,
+    },
   });
 
   return entry;
@@ -16,6 +19,14 @@ const getJournalEntry = async (id) => {
 
 const EntryPage = async ({ params }) => {
   const entry = await getJournalEntry(params.id);
+  console.log;
+  const { mood, summary, colour, subject, negative } = entry;
+  const analysisData = [
+    { name: "Subject", value: subject },
+    { name: "Summary", value: summary },
+    { name: "Mood", value: mood },
+    { name: "Negative", value: negative ? "True" : "False" },
+  ];
   return (
     <div className="h-full w-full">
       <Editor entry={entry} />

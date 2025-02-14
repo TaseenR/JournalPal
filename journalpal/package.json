@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@langchain/core": "^0.3.40",
+    "@langchain/openai": "^0.4.4",
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-autosave": "^0.4.4",

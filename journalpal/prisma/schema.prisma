@@ -35,8 +35,9 @@ model Analysis {
   createdAt DateTime     @default(now())
   mood      String
   summary   String
+  subject   String
   colour    String
   negative  Boolean
   entryId   String       @unique
-  entry     JourneyEntry @relation(fields: [entryId], references: [id])
+  entry     JourneyEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
 }

@@ -1,5 +1,7 @@
+import { analyse } from "@/utils/ai";
 import { getUserByClerkId } from "@/utils/auth";
 import { prisma } from "@/utils/db";
+import { NextResponse } from "next/server";
 
 export const PATCH = async (request: Request, { params }) => {
   try {
@@ -24,7 +26,24 @@ export const PATCH = async (request: Request, { params }) => {
       where: { id: existingEntry.id },
       data: data,
     });
-    return new Response(JSON.stringify({ updatedEntry }));
+
+    const analysis = await analyse(updatedEntry.content);
+    await prisma.analysis.upsert({
+      where: {
+        entryId: existingEntry.id,
+      },
+      create: {
+        entryId: updatedEntry.id,
+        ...analysis,
+      },
+      update: {
+        ...analysis,
+      },
+    });
+
+    return NextResponse.json({
+      data: { ...updatedEntry, analysis: analysis },
+    });
   } catch (error) {
     return new Response(JSON.stringify({ error: "failed to update entry" }));
   }

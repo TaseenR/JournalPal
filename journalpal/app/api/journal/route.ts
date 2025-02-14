@@ -1,3 +1,4 @@
+import { analyse } from "@/utils/ai";
 import { getUserByClerkId } from "@/utils/auth";
 import { prisma } from "@/utils/db";
 import { auth } from "@clerk/nextjs/server";
@@ -10,6 +11,14 @@ export const POST = async () => {
     data: {
       userId: user.id,
       content: "Write about anything and everything",
+    },
+  });
+
+  const analysis = await analyse(entry.content);
+  await prisma.analysis.create({
+    data: {
+      entryId: entry.id,
+      ...analysis,
     },
   });
 
