@@ -1,10 +1,8 @@
-/**
- *
- */
-import { ChatOpenAI, OpenAI } from "@langchain/openai";
+import { ChatOpenAI } from "@langchain/openai";
 import { StructuredOutputParser } from "@langchain/core/output_parsers";
 import z from "zod";
 import { PromptTemplate } from "@langchain/core/prompts";
+import { Document } from "@langchain/core/documents";
 
 const parser = StructuredOutputParser.fromZodSchema(
   z.object({
@@ -60,4 +58,19 @@ export const analyse = async (content) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+const query = async (question, entries) => {
+  const docs = entries.map((entry) => {
+    new Document({
+      pageContent: entry.content,
+      metadata: { id: entry.entryId, createdAt: entry.createdAt },
+    });
+  });
+
+  const model = new ChatOpenAI({
+    temperature: 0,
+    modelName: "gpt-3.5-turbo",
+    apiKey: process.env.OPENAI_API_KEY,
+  });
 };

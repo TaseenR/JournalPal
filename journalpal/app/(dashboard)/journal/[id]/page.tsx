@@ -19,7 +19,6 @@ const getJournalEntry = async (id) => {
 
 const EntryPage = async ({ params }) => {
   const entry = await getJournalEntry(params.id);
-  console.log;
   const { mood, summary, colour, subject, negative } = entry;
   const analysisData = [
     { name: "Subject", value: subject },
