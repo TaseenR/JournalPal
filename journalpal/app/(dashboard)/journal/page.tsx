@@ -1,6 +1,5 @@
 import EntryCard from "@/components/EntryCard";
-import NewEntryCard from "@/components/newEntryCard";
-import { analyse } from "@/utils/ai";
+import NewEntryCard from "@/components/NewEntryCard";
 import { getUserByClerkId } from "@/utils/auth";
 import { prisma } from "@/utils/db";
 import Link from "next/link";
@@ -19,13 +18,6 @@ const getEntries = async () => {
       analysis: true,
     },
   });
-
-  //   console.log(
-  //     await analyse(
-  //       "Today, I bought a new keyboard. Typing feels smooth, and I'm quite satisfied with it."
-  //     )
-  //   );
-
   return entries;
 };
 
