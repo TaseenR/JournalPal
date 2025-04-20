@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "vercel:build": "npx prisma generate && next build --debug",
+    "vercel:build": "npx prisma generate && next build --debug && echo 'Build complete ✅' && exit 0",
     "build": "next build --debug",
     "start": "next start",
     "lint": "next lint",
