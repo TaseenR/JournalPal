@@ -15,6 +15,7 @@ model User {
   clerkId   String         @unique
   updatedAt DateTime       @updatedAt
   entries   JourneyEntry[]
+  Analysis  Analysis[]
 }
 
 model JourneyEntry {
@@ -22,7 +23,7 @@ model JourneyEntry {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   userId    String
-  content   String    @db.Text
+  content   String
   user      User      @relation(fields: [userId], references: [id])
   analysis  Analysis?
 
@@ -30,14 +31,19 @@ model JourneyEntry {
 }
 
 model Analysis {
-  id        String       @id @default(uuid())
-  updatedAt DateTime     @updatedAt
-  createdAt DateTime     @default(now())
-  mood      String
-  summary   String
-  subject   String
-  colour    String
-  negative  Boolean
-  entryId   String       @unique
-  entry     JourneyEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  id             String       @id @default(uuid())
+  updatedAt      DateTime     @updatedAt
+  createdAt      DateTime     @default(now())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id])
+  mood           String
+  summary        String
+  subject        String
+  colour         String
+  negative       Boolean
+  sentimentScore Float        @default(0)
+  entryId        String       @unique
+  entry          JourneyEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

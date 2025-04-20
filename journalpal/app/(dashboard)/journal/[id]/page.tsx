@@ -3,8 +3,8 @@ import { getUserByClerkId } from "@/utils/auth";
 import { prisma } from "@/utils/db";
 
 const getJournalEntry = async (id) => {
-  const user = getUserByClerkId();
-  const entry = prisma.journeyEntry.findFirst({
+  const user = await getUserByClerkId();
+  const entry = await prisma.journeyEntry.findFirst({
     where: {
       userId: user.id,
       id: id,
@@ -18,14 +18,10 @@ const getJournalEntry = async (id) => {
 };
 
 const EntryPage = async ({ params }) => {
+  if (!params.id) {
+    return <div>ERROR: NO ID PROVIDED</div>;
+  }
   const entry = await getJournalEntry(params.id);
-  const { mood, summary, colour, subject, negative } = entry;
-  const analysisData = [
-    { name: "Subject", value: subject },
-    { name: "Summary", value: summary },
-    { name: "Mood", value: mood },
-    { name: "Negative", value: negative ? "True" : "False" },
-  ];
   return (
     <div className="h-full w-full">
       <Editor entry={entry} />

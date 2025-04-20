@@ -1,8 +1,7 @@
-import { ChatOpenAI } from "@langchain/openai";
+import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { StructuredOutputParser } from "@langchain/core/output_parsers";
 import z from "zod";
 import { PromptTemplate } from "@langchain/core/prompts";
-import { Document } from "@langchain/core/documents";
 
 const parser = StructuredOutputParser.fromZodSchema(
   z.object({
@@ -20,6 +19,11 @@ const parser = StructuredOutputParser.fromZodSchema(
       .boolean()
       .describe(
         "is the journal entry negative? does the writer show negative emotions"
+      ),
+    sentimentScore: z
+      .number()
+      .describe(
+        "sentiment of the text and rated on as scale from -100 to 100 where -100 is extremely negative"
       ),
   })
 );
@@ -60,17 +64,36 @@ export const analyse = async (content) => {
   }
 };
 
-const query = async (question, entries) => {
-  const docs = entries.map((entry) => {
-    new Document({
-      pageContent: entry.content,
-      metadata: { id: entry.entryId, createdAt: entry.createdAt },
-    });
-  });
+export const query = async (question, entries) => {
+  console.log("QUERY RUNNING");
 
-  const model = new ChatOpenAI({
-    temperature: 0,
-    modelName: "gpt-3.5-turbo",
-    apiKey: process.env.OPENAI_API_KEY,
-  });
+  //   const docs = entries.map(
+  //     (entry) =>
+  //       new Document({
+  //         pageContent: entry.content,
+  //         metadata: { id: entry.entryId, createdAt: entry.createdAt },
+  //       })
+  //   );
+
+  //   const model = new ChatOpenAI({
+  //     temperature: 0,
+  //     modelName: "gpt-3.5-turbo",
+  //   });
+
+  //   const embeddings = new OpenAIEmbeddings();
+  //   const store = await Chroma.fromDocuments(docs, embeddings, {
+  //     collectionName: "my_journals",
+  //   });
+
+  //   const retriever = store.asRetriever();
+  //   const relDocs = await retriever.getRelevantDocuments(question);
+
+  //   const chain = RetrievalQAChain.fromChain(model, { retriever });
+
+  //   const res = await chain.call({
+  //     input_documents: relDocs,
+  //     question,
+  //   });
+
+  //   return res;
 };

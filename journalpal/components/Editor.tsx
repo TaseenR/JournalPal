@@ -9,12 +9,20 @@ const Editor = ({ entry }) => {
   const [isSaving, setSaving] = useState();
   const [isLoading, setisLoading] = useState(false);
   const [analysis, setAnalysis] = useState(entry.analysis);
-  const { mood, summary, colour, subject, negative } = analysis;
+  const {
+    mood = "Unknown",
+    summary = "No summary available",
+    colour = "#ffffff",
+    subject = "Unknown",
+    negative = false,
+    sentimentScore = "N/A",
+  } = analysis || {};
   const analysisData = [
     { name: "Subject", value: subject },
     { name: "Summary", value: summary },
     { name: "Mood", value: mood },
     { name: "Negative", value: negative ? "True" : "False" },
+    { name: "Sentiment", value: sentimentScore },
   ];
   useAutosave({
     data: value,
@@ -22,6 +30,7 @@ const Editor = ({ entry }) => {
       if (_value === entry.content) return;
       setisLoading(true);
       const updated = await updateEntry(entry.id, _value);
+      console.log("Testing the updated: ", updated);
       setAnalysis(updated.analysis);
       setisLoading(false);
     },
@@ -43,15 +52,23 @@ const Editor = ({ entry }) => {
         </div>
         <div>
           <ul>
-            {analysisData.map((item) => (
-              <li
-                key={item.name}
-                className="px-2 py-4 flex items-center justify-between borer-b border-t border-black/10"
-              >
-                <span className="font-semibold text-lg">{item.name}</span>
-                <span>{item.value}</span>
+            {analysis ? (
+              analysisData.map((item) => (
+                <li
+                  key={item.name}
+                  className="px-2 py-4 flex items-center justify-between borer-b border-t border-black/10"
+                >
+                  <span className="font-semibold text-lg">{item.name}</span>
+                  <span>{item.value}</span>
+                </li>
+              ))
+            ) : (
+              <li className="px-2 py-4 flex items-center justify-between borer-b border-t border-black/10">
+                <span className="font-semibold text-lg">
+                  Waiting for your entry
+                </span>
               </li>
-            ))}
+            )}
           </ul>
         </div>
       </div>
