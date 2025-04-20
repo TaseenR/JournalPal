@@ -7,7 +7,7 @@ import { useAutosave } from "react-autosave";
 const Editor = ({ entry }) => {
   const [value, setValue] = useState(entry.content);
   const [isSaving, setSaving] = useState();
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setisLoading] = useState(false); //fake commit to push
   const [analysis, setAnalysis] = useState(entry.analysis);
   const {
     mood = "Unknown",
