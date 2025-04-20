@@ -16,6 +16,7 @@
     "@langchain/openai": "^0.4.4",
     "@testing-library/dom": "^10.4.0",
     "next": "15.1.6",
+    "prisma": "^6.6.0",
     "react": "^19.0.0",
     "react-autosave": "^0.4.4",
     "react-dom": "^19.0.0",
